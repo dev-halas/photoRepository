@@ -1,0 +1,97 @@
+.userPanel {
+    
+}
+
+.userPanel--bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 10vh;
+    z-index: 99;
+    background-color: #3d3d3d;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
+}
+
+.barInner{
+    display: flex;
+    width: 98vw;
+    height: 100%;
+    margin: auto;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userPanel--barDistance {
+    margin-top: calc(10vh + 50px);
+}
+
+.userPanel--sessions {
+    width: 98vw;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1vw;
+}
+
+.userPanel--session {
+    grid-column: span 1;
+    position: relative;
+    min-height: 40vh;
+    text-decoration: none;
+}
+
+.userPanel--sessionInfo:hover{
+    cursor: pointer;
+    background-color: rgba(18, 18, 18, 0.649);
+}
+
+.userPanel--sessionInfo {
+    height: 100%;
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-size: 500px 100px;
+    background-repeat: no-repeat;
+    background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 80%);
+    transition: background .3s ease-in-out;
+    -webkit-transition: background .3s ease-in-out;
+    -moz-transition: background .3s ease-in-out;
+    -ms-transition: background .3s ease-in-out;
+    -o-transition: background .3s ease-in-out;
+}
+
+.sessionTitle {
+    padding: 15px 25px;
+    font-weight: 200;
+    font-size: 18px;
+    text-align: center;
+    color: bisque;
+    transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+}
+
+.userPanel--sessionInfo:hover .sessionTitle {
+    font-size: 22px;
+    padding-bottom: 50px;
+}
+
+.sessionLink {
+    visibility: hidden;
+    background: transparent;
+
+}
+
+.userPanel--session img {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    
+}
+
