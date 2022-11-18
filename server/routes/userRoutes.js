@@ -7,7 +7,7 @@ router.post('/register', registerUser)
 router.post('/login', loginUser)
 router.get('/panel', protect, userPanel)
 router.put('/confirm-email/:userID/:confirmToken', userConfirmEmail)
-router.put('/forgot-password', userForgotPassword)
+router.post('/forgot-password', userForgotPassword)
 router.put('/reset-password', userResetPassword)
 router.put('/edit-profile', protect, userEditProfile)
 

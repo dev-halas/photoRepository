@@ -16,7 +16,7 @@ app.use(cors());
 
 // middlewares
 app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: true}))
 
 
 // Import routes

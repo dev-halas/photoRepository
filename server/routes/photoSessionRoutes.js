@@ -7,6 +7,7 @@ const {
     checkPhotoSessionExist,
     updatePhotoSession, 
     uploadPhotoSessionImages,
+    uploadCoverImage,
     deletePhotoSession, 
     guestLogin,
     getGuestPublicParams,
@@ -22,7 +23,9 @@ const { uploadGallery } = require('../middleware/uploadFileMiddleware')
 router.get('/all', protect, getPhotoSessions)
 router.get('/:id', protect, getPhotoSession)
 router.post('/create', protect, createPhotoSession, uploadGallery.array("images"), uploadPhotoSessionImages)
+router.put('/uploadImages/:id', protect, uploadGallery.array("images"), uploadPhotoSessionImages)
 router.put('/update/:id', protect, checkPhotoSessionExist, updatePhotoSession, uploadGallery.array("photos"), uploadPhotoSessionImages)
+router.put('/coverPhoto/:id', protect, checkPhotoSessionExist, uploadGallery.single("cover"), uploadCoverImage)
 router.post('/guest/:id?', guestLogin)
 router.get('/guest/:id?', getGuestPublicParams)
 router.get('/published/showGallery/:imgId?', photoSessionProtect, getPublishedPhotoSession)

@@ -1,0 +1,70 @@
+.userLogin {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.userLogin--logo {
+    width: min(90%, 350px);
+}
+
+.userLogin form {
+    margin-top: 20px;
+    width: min(90%, 350px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.userLogin .form-group {
+    width: 100%;
+}
+
+.userLogin input {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #fbf8f3;
+    color: #232323;
+    outline: none;
+    border: 1px solid #232323;
+    margin-top: 10px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    border: 1px solid #232323;
+    -webkit-text-fill-color: #232323;
+    -webkit-box-shadow: 0 0 0px 1000px #fbf8f3 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.userLogin button {
+    width: 100%;
+    padding: 15px 20px;
+    margin-top: 30px;
+    background-color: #ffcb74;
+    color: #2f2f2f;
+    border: none;
+}
+
+.resetPass {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+
+.resetPass a, .registerLink a {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 2px solid #ffcb74;
+}
+
+.registerLink {
+    margin-top: 10px;
+    text-align: center;
+}

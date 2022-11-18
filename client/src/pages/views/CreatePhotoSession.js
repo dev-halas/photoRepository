@@ -1,90 +1,65 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { userAuthHeader } from '../../helpers/httpHeaders';
 
 const CreatePhotoSession = () => {
-    const[title, setTitle] = useState("")
-    const[images, setImages] = useState([])
-    const[error, setError] = useState("")
-    
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const API_URL = '/api/photo_session/create'
-    const userToken = `Bearer ${localStorage.getItem("userToken")}`
-    const createHeader = {
-        headers: {
-            'authorization': userToken,
-            //'Accept' : 'application/json',
-            //Content-Type': 'application/json',
-            'Content-Type': 'multipart/form-data'
-        }
-    }
+    const [title, setTitle] = useState('');
+    const [images, setImages] = useState([]);
+    const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (!userToken) navigate('/login')
-    },[navigate])
+    const API_URL = '/api/photo_session/create';
 
-    const onFileChange = (e) => {
-        setImages({ images: e.target.files })
-    }
+    const ImagesChange = (e) => {
+        setImages(e.target.files);
+    };
 
+    const onUpload = async (e) => {
+        e.preventDefault();
 
-    const createSessionHandler = async (e) => {
-        e.preventDefault()
-        
-        const formData = new FormData();
-        for (const key of Object.keys(images)) {
-            formData.append('image', images[key])
-        }
+        let formData = new FormData();
 
-        try {
-            const response = axios.post(API_URL, formData,
-                createHeader
-            ).then((response) =>{
-                console.log(response)
+        formData.append('title', title);
+
+        Object.keys(images).map((key) => {
+            return formData.append('images', images[key]);
+        });
+
+        await axios
+            .post(API_URL, formData, userAuthHeader, {})
+            .then((response) => {
+                navigate('/edit/' + response.data._id);
             })
-
-        } catch (error) {
-            setError(error.response.data.message)
-        }
-    }
-
-    const addFiles = (e) => {
-        const files = e.target.files;
-            let array = []
-            for (let i = 0; i < files.length; i++) {
-              const imgSrc = files[i];
-              array = [...array, {image: imgSrc.name}]
-              
-        }
-        setImages(array)
-        
-    }
+            .catch((error) => {
+                setError(error);
+            });
+    };
 
     return (
-        <form onSubmit={createSessionHandler} className="login-screen__form">
+        <form onSubmit={onUpload} className="login-screen__form">
             <span className="error-message">{error}</span>
             <div className="form-group">
-              <label htmlFor="password">
-                Wpisz hasło aby uzyskać dostęp do sesji zdjęciowej
-              </label>
-              <input
-                type="text"
-                required
-                id="title"
-                autoComplete="false"
-                placeholder="Enter title"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-                tabIndex={0}
-              />
+                <label htmlFor="password">Podaj nazwę sesji</label>
+                <input
+                    type="text"
+                    required
+                    id="title"
+                    autoComplete="false"
+                    placeholder="Enter title"
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                    tabIndex={0}
+                />
             </div>
-            <input type="file" onChange={onFileChange}  multiple/>
+            <input type="file" onChange={ImagesChange} multiple />
             <button type="submit" className="btn btn-primary">
-              Utwórz
+                Utwórz
             </button>
-          </form>
-    )
-}
+        </form>
+    );
+};
 
-export default CreatePhotoSession
+export default CreatePhotoSession;

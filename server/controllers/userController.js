@@ -113,15 +113,6 @@ const loginUser = asyncHandler( async (req, res) => {
 const userPanel = asyncHandler( async (req, res) => {
     const { _id, username, email } = await User.findById(req.user)
 
-    /*
-    console.log('token exp', req.user.expire)
-    console.log('database exp', expire)
-
-    if(req.user.expire <= expire) {
-        res.status(401) 
-        throw new Error('Token expire')
-    }
-    */
 
     res.status(200).json({
         id: _id,

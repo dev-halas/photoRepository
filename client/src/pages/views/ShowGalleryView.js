@@ -1,49 +1,47 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { IoLogOutOutline } from "react-icons/io5";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { IoLogOutOutline } from 'react-icons/io5';
+import { guestAuthHeader } from '../../helpers/httpHeaders';
 
-import Gallery, {ResponsiveMasonry} from "react-responsive-masonry"
+import Gallery, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import '../css/ShowGalleryView.css'
+import '../css/ShowGalleryView.css';
 
 const ShowGalleryView = () => {
-    const navigate = useNavigate('')
-    
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
     const [sessionData, setSessionData] = useState({
-        title: "",
-        firstPhoto: ""
+        title: '',
+        coverPhoto: '',
     });
-    const [imagesData, setImagesData] = useState([])
-    
-    const logoutLink = '/guest_login/' + localStorage.getItem("photoSessionId")
-    const SHOW_GALLERY_API_URL = '/api/photo_session/published/showGallery/'
-    const guestToken = `Bearer ${localStorage.getItem("guestToken")}`
-    const guestHeader = {
-        headers: {
-            'authorization': guestToken,
-            'Accept' : 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }
+    const [largeImage, setLargeImage] = useState(0);
+    const [imagesData, setImagesData] = useState([
+        {
+            image: '',
+            thumbnail: '',
+            chosen: Boolean,
+        },
+    ]);
+
+    const logoutLink = '/guest_login/' + localStorage.getItem('photoSessionId');
+    const SHOW_GALLERY_API_URL = '/api/photo_session/published/showGallery/';
 
     useEffect(() => {
-        axios.get(SHOW_GALLERY_API_URL, guestHeader )
-        .then(response => {
-            setSessionData(response.data);
-            setImagesData(response.data.images)
-        })
-        .catch((error) => {
-            if (error.response) {
-                setError(error.response.data.message)
-            }
-        });
+        axios
+            .get(SHOW_GALLERY_API_URL, guestAuthHeader)
+            .then((response) => {
+                setSessionData(response.data);
+                setImagesData(response.data.images);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    setError(error.response.data.message);
+                }
+            });
+    }, []);
 
-    },[])
+    const coverPhotoNotExist = imagesData[0].image;
 
-    const firstPhotoNotExist = imagesData[0]
-    
     return (
         <div>
             {error}
@@ -53,40 +51,50 @@ const ShowGalleryView = () => {
                     <h1>{sessionData.title}</h1>
                     <a href="#photo_session">Zobacz zdjęcia</a>
                 </div>
-                <img src={ sessionData.firstPhoto ?
-                    sessionData.firstPhoto : firstPhotoNotExist
-                    } alt={sessionData.firstPhoto} />
+                <img src={sessionData.coverPhoto ? sessionData.coverPhoto : coverPhotoNotExist} alt={sessionData.coverPhoto} />
             </div>
             <div className="photoSessionBar">
                 <div className="photoSessionBar--left">
                     <p>{sessionData.title}</p>
                 </div>
                 <div className="photoSessionBar--right">
-                    <button onClick={() => localStorage.removeItem("guestToken")}>
+                    <button onClick={() => localStorage.removeItem('guestToken')}>
                         <Link to={logoutLink}>
-                            <IoLogOutOutline size={32}/>
+                            <IoLogOutOutline size={32} />
                         </Link>
                     </button>
                 </div>
             </div>
+
+            <div className="showPhoto">
+                <div className="showPhoto--bar">
+                    <button>wyjdź</button>
+                </div>
+                <div className="showPhoto--container">
+                    <div className="showPhoto--image">
+                        <img src={imagesData[largeImage].thumbnail} alt="" />
+                        <button onClick={() => setLargeImage(() => largeImage - 1)}>Prev</button>
+                        <button onClick={() => setLargeImage(() => largeImage + 1)}>Next</button>
+                    </div>
+                </div>
+            </div>
+
             <div className="photoSession" id="photo_session">
-                <ResponsiveMasonry columnsCountBreakPoints={{ 750: 2, 900: 3, 1200: 4}}>
+                <ResponsiveMasonry columnsCountBreakPoints={{ 750: 2, 900: 3, 1200: 4 }}>
                     <Gallery gutter="8px">
-                    {
-                        imagesData.map((images, index) => (
-                            <div className={'photo item_' +index } key={index}>
-                                <img className={index} src={images.image} alt="" />
+                        {imagesData.map((images, key) => (
+                            <div className={'photo item_' + key} key={key}>
+                                <img src={images.thumbnail} alt="" onClick={() => setLargeImage(key)} />
                                 <div className="photo--menu">
-                                    <div className={images.chosen ? "checked" : "unchecked"}></div>
+                                    <div className={images.chosen ? 'checked' : 'unchecked'}></div>
                                 </div>
                             </div>
-                        ))
-                    }
+                        ))}
                     </Gallery>
                 </ResponsiveMasonry>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ShowGalleryView
+export default ShowGalleryView;
