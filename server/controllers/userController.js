@@ -245,7 +245,7 @@ const userResetPassword = asyncHandler( async (req, res) => {
 // @access private
 const userEditProfile = asyncHandler( async (req, res) => {
     
-    const { password, phone, username } = req.body
+    const { password, phone } = req.body
 
     const user = await User.findById(req.user.id)
 
@@ -255,7 +255,6 @@ const userEditProfile = asyncHandler( async (req, res) => {
 
 
     await user.updateOne({
-        username: username,
         password: hashPassword,
         phone: phone,
         expire: Date.now()
